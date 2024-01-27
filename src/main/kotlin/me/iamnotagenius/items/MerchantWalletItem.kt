@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package me.iamnotagenius.items
 
 import me.iamnotagenius.MerchantsDelight
@@ -77,13 +79,16 @@ class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) 
         return false
     }
 
-    public fun removeFromWallet(walletStack: ItemStack?, justOne: Boolean): ItemStack {
+    public fun removeFromWallet(walletStack: ItemStack?, amount: Int): ItemStack {
         if (walletStack?.item !is MerchantWalletItem) {
             return ItemStack.EMPTY
         }
-        val amount = if (justOne && walletStack.emeralds > 0) 1 else walletStack.emeralds.coerceAtMost(Items.EMERALD.maxCount)
+        val amount = amount.coerceAtMost(walletStack.emeralds)
         walletStack.emeralds -= amount
         return ItemStack(Items.EMERALD, amount)
+    }
+    public fun removeFromWallet(walletStack: ItemStack?, justOne: Boolean): ItemStack {
+        return removeFromWallet(walletStack, if (justOne && walletStack.emeralds > 0) 1 else walletStack.emeralds.coerceAtMost(Items.EMERALD.maxCount))
     }
 
     companion object {
