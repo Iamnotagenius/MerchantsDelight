@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "wanderers_wallet",
-		"particle": "wanderers_wallet"
+		"0": "merchantsdelight:block/wanderers_wallet",
+		"particle": "merchantsdelight:block/wanderers_wallet"
 	},
 	"elements": [
 		{

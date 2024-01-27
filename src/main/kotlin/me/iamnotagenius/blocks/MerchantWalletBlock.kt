@@ -2,6 +2,7 @@ package me.iamnotagenius.blocks
 
 import me.iamnotagenius.MerchantsDelight
 import me.iamnotagenius.blocks.entities.MerchantWalletBlockEntity
+import me.iamnotagenius.items.MerchantWalletItem
 import me.iamnotagenius.items.emeralds
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
@@ -23,10 +24,15 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-public class MerchantWalletBlock(private val capacity: Int, settings: Settings) : BlockWithEntity(settings), BlockEntityProvider {
+class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), BlockEntityProvider {
+    lateinit var item: MerchantWalletItem
     init {
         defaultState = defaultState.with(Properties.HORIZONTAL_FACING, Direction.NORTH)
     }
+
+
+    val capacity: Int
+        get() = item.capacity
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>?) {
         builder?.add(Properties.HORIZONTAL_FACING)
@@ -71,7 +77,7 @@ public class MerchantWalletBlock(private val capacity: Int, settings: Settings) 
         pos: BlockPos?,
         context: ShapeContext?
     ): VoxelShape {
-        return VoxelShapes.cuboid(0.25, 0.0, 0.25, 0.75, 1.0, 0.75);
+        return VoxelShapes.cuboid(0.25, 0.0, 0.25, 0.75, 1.0, 0.75)
     }
 
     override fun createBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity {
@@ -100,7 +106,7 @@ public class MerchantWalletBlock(private val capacity: Int, settings: Settings) 
             super.onBreak(world, pos, state, player)
             return
         }
-        val itemStack = ItemStack(MerchantsDelight.MERCHANT_WALLET_ITEM)
+        val itemStack = ItemStack(item)
         itemStack.emeralds = blockEntity.amount
         val itemEntity = ItemEntity(world, pos.x.toDouble() + 0.5, pos.y.toDouble() + 0.5, pos.z.toDouble() + 0.5, itemStack)
         itemEntity.setToDefaultPickupDelay()

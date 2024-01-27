@@ -38,8 +38,9 @@ public class PlayerInventoryMixin {
 		}
 		var walletStack = walletStackOptional.get();
 		var item = (MerchantWalletItem)walletStack.getItem();
-		item.addToWallet(walletStack, itemStack, false);
-		cir.setReturnValue(true);
+		if (item.addToWallet(walletStack, itemStack, false)) {
+			cir.setReturnValue(true);
+		}
 	}
 	
 	@Unique

@@ -1,3 +1,6 @@
 {
-  "block.merchantsdelight.merchants_wallet": "Merchant's wallet"
+  "block.merchantsdelight.merchants_wallet": "Merchant's wallet",
+  "block.merchantsdelight.emerald_wallet": "Emerald wallet",
+  "block.merchantsdelight.wanderers_wallet": "Wanderer's wallet",
+  "block.merchantsdelight.gilded_wallet": "Gilded wallet"
 }

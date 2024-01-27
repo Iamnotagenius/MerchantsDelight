@@ -1,8 +1,7 @@
-@file:Suppress("NAME_SHADOWING")
-
 package me.iamnotagenius.items
 
 import me.iamnotagenius.MerchantsDelight
+import me.iamnotagenius.blocks.MerchantWalletBlock
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.entity.player.PlayerEntity
@@ -22,6 +21,9 @@ var ItemStack?.emeralds: Int
     set(value) = this?.setSubNbt(MerchantWalletItem.EMERALDS_KEY, NbtInt.of(value))?: Unit
 
 class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) : BlockItem(block, settings) {
+    init {
+        (block as? MerchantWalletBlock)?.item = this
+    }
     override fun onCraft(stack: ItemStack?, world: World?, player: PlayerEntity?) {
         stack.emeralds = 0
 }
@@ -63,7 +65,7 @@ class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) 
 
     override fun isItemBarVisible(stack: ItemStack?): Boolean = true
 
-    public fun addToWallet(walletStack: ItemStack?, emeraldStack: ItemStack, justOne: Boolean): Boolean {
+    fun addToWallet(walletStack: ItemStack?, emeraldStack: ItemStack, justOne: Boolean): Boolean {
         if (walletStack?.item !is MerchantWalletItem || !emeraldStack.isOf(Items.EMERALD)) {
             return false
         }
@@ -79,7 +81,7 @@ class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) 
         return false
     }
 
-    public fun removeFromWallet(walletStack: ItemStack?, amount: Int): ItemStack {
+    fun removeFromWallet(walletStack: ItemStack?, amount: Int): ItemStack {
         if (walletStack?.item !is MerchantWalletItem) {
             return ItemStack.EMPTY
         }
@@ -87,7 +89,7 @@ class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) 
         walletStack.emeralds -= amount
         return ItemStack(Items.EMERALD, amount)
     }
-    public fun removeFromWallet(walletStack: ItemStack?, justOne: Boolean): ItemStack {
+    fun removeFromWallet(walletStack: ItemStack?, justOne: Boolean): ItemStack {
         return removeFromWallet(walletStack, if (justOne && walletStack.emeralds > 0) 1 else walletStack.emeralds.coerceAtMost(Items.EMERALD.maxCount))
     }
 
