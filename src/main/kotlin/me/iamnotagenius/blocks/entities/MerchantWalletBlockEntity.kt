@@ -1,0 +1,20 @@
+package me.iamnotagenius.blocks.entities
+
+import me.iamnotagenius.MerchantsDelight
+import me.iamnotagenius.items.MerchantWalletItem
+import net.minecraft.block.BlockState
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.nbt.NbtCompound
+import net.minecraft.util.math.BlockPos
+
+class MerchantWalletBlockEntity(pos: BlockPos?, state: BlockState?, var amount: Int = 0) :
+    BlockEntity(MerchantsDelight.MERCHANT_BLOCK_ENTITY, pos, state) {
+
+    override fun writeNbt(nbt: NbtCompound?) {
+        nbt?.putInt(MerchantWalletItem.EMERALDS_KEY, amount)
+    }
+
+    override fun readNbt(nbt: NbtCompound?) {
+        amount = nbt?.getInt(MerchantWalletItem.EMERALDS_KEY)?: 0
+    }
+}

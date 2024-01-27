@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "me.iamnotagenius.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"PlayerInventoryMixin",
+		"MerchantScreenHandlerMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
