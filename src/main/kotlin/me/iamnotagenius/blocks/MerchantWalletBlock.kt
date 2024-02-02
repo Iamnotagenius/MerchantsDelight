@@ -15,6 +15,7 @@ import net.minecraft.item.Items
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.Properties
 import net.minecraft.util.ActionResult
+import net.minecraft.util.BlockRotation
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
@@ -42,7 +43,14 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
         return super.getPlacementState(ctx)?.with(Properties.HORIZONTAL_FACING, ctx?.horizontalPlayerFacing?.opposite)
     }
 
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun onUse(
+        state: BlockState,
+        world: World,
+        pos: BlockPos,
+        player: PlayerEntity,
+        hand: Hand,
+        hit: BlockHitResult
+    ): ActionResult {
         val blockEntity = world.getBlockEntity(pos) as? MerchantWalletBlockEntity ?: return ActionResult.FAIL
         val activeStack = player.inventory.mainHandStack
         MerchantsDelight.logger.info("Active stack: {}", activeStack)
@@ -108,9 +116,19 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
         }
         val itemStack = ItemStack(item)
         itemStack.emeralds = blockEntity.amount
-        val itemEntity = ItemEntity(world, pos.x.toDouble() + 0.5, pos.y.toDouble() + 0.5, pos.z.toDouble() + 0.5, itemStack)
+        val itemEntity = ItemEntity(
+            world,
+            pos.x.toDouble() + 0.5,
+            pos.y.toDouble() + 0.5,
+            pos.z.toDouble() + 0.5,
+            itemStack
+        )
         itemEntity.setToDefaultPickupDelay()
         world.spawnEntity(itemEntity)
         super.onBreak(world, pos, state, player)
+    }
+
+    override fun rotate(state: BlockState, rotation: BlockRotation): BlockState {
+        return state.with(Properties.HORIZONTAL_FACING, rotation.rotate(state.get(Properties.HORIZONTAL_FACING)))
     }
 }

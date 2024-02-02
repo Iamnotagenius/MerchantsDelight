@@ -1,5 +1,7 @@
 package me.iamnotagenius
 
+import fzzyhmstrs.structurized_reborn.api.StructurePoolAddCallback
+import fzzyhmstrs.structurized_reborn.impl.FabricStructurePoolRegistry
 import me.iamnotagenius.blocks.MerchantWalletBlock
 import me.iamnotagenius.blocks.entities.MerchantWalletBlockEntity
 import me.iamnotagenius.items.MerchantWalletItem
@@ -23,14 +25,27 @@ object MerchantsDelight : ModInitializer {
 
     lateinit var MERCHANT_BLOCK_ENTITY: BlockEntityType<MerchantWalletBlockEntity>
 
-    private fun registerWallet(name: String, capacity: Int, builder: FabricBlockEntityTypeBuilder<MerchantWalletBlockEntity>, blockSettings: FabricBlockSettings?, itemSettings: FabricItemSettings?) {
+    private fun registerWallet(
+        name: String,
+        capacity: Int,
+        builder: FabricBlockEntityTypeBuilder<MerchantWalletBlockEntity>,
+        blockSettings: FabricBlockSettings?,
+        itemSettings: FabricItemSettings?
+    ) {
         val blockSettings = blockSettings?: FabricBlockSettings.create()
             .strength(0.8f).nonOpaque().sounds(BlockSoundGroup.WOOL)
         val itemSettings = itemSettings?: FabricItemSettings().maxCount(1)
 
-        val block = Registry.register(Registries.BLOCK, Identifier.of(MOD_ID, name), MerchantWalletBlock(blockSettings))
-        val item = Registry.register(Registries.ITEM, Identifier.of(MOD_ID, name),
-            MerchantWalletItem(block, itemSettings, capacity))
+        val block = Registry.register(
+            Registries.BLOCK,
+            Identifier.of(MOD_ID, name),
+            MerchantWalletBlock(blockSettings)
+        )
+        val item = Registry.register(
+            Registries.ITEM,
+            Identifier.of(MOD_ID, name),
+            MerchantWalletItem(block, itemSettings, capacity),
+        )
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register { entries -> entries.add(item) }
         builder.addBlock(block)
     }
@@ -43,8 +58,16 @@ object MerchantsDelight : ModInitializer {
         registerWallet("gilded_wallet",     650, builder, null, null)
         registerWallet("wanderers_wallet",  900, builder, null, null)
 
-        MERCHANT_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-            Identifier.of(MOD_ID, "merchants_wallet"),
-            builder.build())
+        MERCHANT_BLOCK_ENTITY = Registry.register(
+            Registries.BLOCK_ENTITY_TYPE,
+            Identifier.of(MOD_ID, "wallets"),
+            builder.build()
+        )
+
+        FabricStructurePoolRegistry.registerSimple(
+            Identifier("minecraft:village/plains/houses"),
+            Identifier("merchantsdelight:village_bank"),
+            10
+        )
 	}
 }

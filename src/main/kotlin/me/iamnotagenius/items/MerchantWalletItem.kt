@@ -90,7 +90,10 @@ class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) 
         return ItemStack(Items.EMERALD, amount)
     }
     fun removeFromWallet(walletStack: ItemStack?, justOne: Boolean): ItemStack {
-        return removeFromWallet(walletStack, if (justOne && walletStack.emeralds > 0) 1 else walletStack.emeralds.coerceAtMost(Items.EMERALD.maxCount))
+        return removeFromWallet(
+            walletStack,
+            if (justOne && walletStack.emeralds > 0) 1 else walletStack.emeralds.coerceAtMost(Items.EMERALD.maxCount)
+        )
     }
 
     companion object {
