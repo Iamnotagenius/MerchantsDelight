@@ -21,19 +21,12 @@
 				"adapter": "kotlin"
 			}
 		],
-		"client": [
-			{
-				"value": "me.iamnotagenius.MerchantsDelightClient",
-				"adapter": "kotlin"
-			}
+		"mm:early_risers": [
+			"me.iamnotagenius.asm.EarlyRiser"
 		]
 	},
 	"mixins": [
-		"merchantsdelight.mixins.json",
-		{
-			"config": "merchantsdelight.client.mixins.json",
-			"environment": "client"
-		}
+		"merchantsdelight.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.6",
@@ -41,5 +34,6 @@
 		"java": ">=17",
 		"fabric-api": "*",
 		"fabric-language-kotlin": ">=1.9.22"
-	}
+	},
+	"accessWidener": "merchantsdelight.accesswidener"
 }

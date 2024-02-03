@@ -1,11 +1,13 @@
 package me.iamnotagenius.blocks
 
+import me.iamnotagenius.DeepPocketEnchantment
 import me.iamnotagenius.MerchantsDelight
 import me.iamnotagenius.blocks.entities.MerchantWalletBlockEntity
+import me.iamnotagenius.emeralds
 import me.iamnotagenius.items.MerchantWalletItem
-import me.iamnotagenius.items.emeralds
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -33,8 +35,9 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
     }
 
 
-    val capacity: Int
-        get() = item.capacity
+    fun getCapacity(blockEntity: MerchantWalletBlockEntity): Int {
+        return (item.capacity * DeepPocketEnchantment.getCapacityMultiplier(blockEntity.pocket_depth).toInt())
+    }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>?) {
         builder?.add(HORIZONTAL_FACING)
@@ -64,7 +67,7 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
             return ActionResult.SUCCESS
         }
         else if (activeStack.isOf(Items.EMERALD)) {
-            val amount = (capacity - blockEntity.amount).coerceAtMost(activeStack.count)
+            val amount = (getCapacity(blockEntity) - blockEntity.amount).coerceAtMost(activeStack.count)
             if (amount > 0) {
                 blockEntity.amount += amount
                 activeStack.count -= amount
@@ -105,6 +108,7 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
             return
         }
         blockEntity.amount = itemStack.emeralds
+        blockEntity.pocket_depth = EnchantmentHelper.getLevel(MerchantsDelight.DEEP_POCKET, itemStack)
         super.onPlaced(world, pos, state, placer, itemStack)
     }
 
@@ -116,6 +120,7 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
         }
         val itemStack = ItemStack(item)
         itemStack.emeralds = blockEntity.amount
+        EnchantmentHelper.set(mapOf(MerchantsDelight.DEEP_POCKET to blockEntity.pocket_depth), itemStack)
         val itemEntity = ItemEntity(
             world,
             pos.x.toDouble() + 0.5,

@@ -2,8 +2,11 @@ package me.iamnotagenius.items
 
 import me.iamnotagenius.MerchantsDelight
 import me.iamnotagenius.blocks.MerchantWalletBlock
+import me.iamnotagenius.capacity
+import me.iamnotagenius.emeralds
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
+import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.StackReference
 import net.minecraft.item.BlockItem
@@ -16,9 +19,6 @@ import net.minecraft.util.ClickType
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
 
-var ItemStack?.emeralds: Int
-    get() = this?.nbt?.getInt(MerchantWalletItem.EMERALDS_KEY)?: 0
-    set(value) = this?.setSubNbt(MerchantWalletItem.EMERALDS_KEY, NbtInt.of(value))?: Unit
 
 class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) : BlockItem(block, settings) {
     init {
@@ -26,14 +26,14 @@ class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) 
     }
     override fun onCraft(stack: ItemStack?, world: World?, player: PlayerEntity?) {
         stack.emeralds = 0
-}
+    }
 
     override fun getItemBarStep(stack: ItemStack?): Int {
-        return Math.round(stack.emeralds.toFloat() * 13.0f / capacity.toFloat())
+        return Math.round(stack.emeralds.toFloat() * 13.0f / stack.capacity.toFloat())
     }
 
     override fun getItemBarColor(stack: ItemStack?): Int {
-        return MathHelper.hsvToRgb(stack.emeralds.toFloat() / capacity / 3.0f, 1.0f, 1.0f)
+        return MathHelper.hsvToRgb(stack.emeralds.toFloat() / stack.capacity / 3.0f, 1.0f, 1.0f)
     }
 
     override fun onClicked(
@@ -71,7 +71,7 @@ class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) 
         }
 
         val amount = if (justOne && emeraldStack.count > 0)
-            1 else (capacity - walletStack.emeralds).coerceAtMost(emeraldStack.count)
+            1 else (walletStack.capacity - walletStack.emeralds).coerceAtMost(emeraldStack.count)
 
         if (amount > 0) {
             walletStack.emeralds += amount

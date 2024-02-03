@@ -2,5 +2,9 @@
   "block.merchantsdelight.merchants_wallet": "Merchant's wallet",
   "block.merchantsdelight.emerald_wallet": "Emerald wallet",
   "block.merchantsdelight.wanderers_wallet": "Wanderer's wallet",
-  "block.merchantsdelight.gilded_wallet": "Gilded wallet"
+  "block.merchantsdelight.gilded_wallet": "Gilded wallet",
+  "block.merchantsdelight.lootable_wallet": "Loot wallet",
+
+  "enchantment.merchantsdelight.deep_pocket": "Deep Pocket",
+  "enchantment.merchantsdelight.deep_pocket.desc": "Increases the capacity of your wallet"
 }

@@ -1,5 +1,6 @@
 package me.iamnotagenius
 
+import com.chocohead.mm.api.ClassTinkerers
 import fzzyhmstrs.structurized_reborn.impl.FabricStructurePoolRegistry
 import me.iamnotagenius.blocks.MerchantWalletBlock
 import me.iamnotagenius.blocks.entities.MerchantWalletBlockEntity
@@ -10,6 +11,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.enchantment.EnchantmentTarget
 import net.minecraft.item.ItemGroups
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
@@ -23,6 +25,9 @@ object MerchantsDelight : ModInitializer {
     private const val MOD_ID = "merchantsdelight"
 
     lateinit var MERCHANT_BLOCK_ENTITY: BlockEntityType<MerchantWalletBlockEntity>
+
+    val WALLET_TARGET: EnchantmentTarget = ClassTinkerers.getEnum(EnchantmentTarget::class.java, "MD\$WALLET");
+    val DEEP_POCKET = DeepPocketEnchantment()
 
     private fun registerWallet(
         name: String,
@@ -62,6 +67,8 @@ object MerchantsDelight : ModInitializer {
             Identifier.of(MOD_ID, "wallets"),
             builder.build()
         )
+
+        Registry.register(Registries.ENCHANTMENT, Identifier.of(MOD_ID, "deep_pocket"), DEEP_POCKET)
 
         listOf("plains", "desert", "taiga", "savanna", "snowy").forEach {
             FabricStructurePoolRegistry.registerSimple(

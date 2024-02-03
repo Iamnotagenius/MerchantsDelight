@@ -24,6 +24,7 @@ repositories {
 			includeGroup "maven.modrinth"
 		}
 	}
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -37,6 +38,10 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
+
+	// Fabric ASM
+	modImplementation "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
+	include "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 	modImplementation "maven.modrinth:Wd844r7Q:${project.structurized_reborn}"
