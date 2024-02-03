@@ -1,0 +1,19 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 32,
+    "frequency": 0.3,
+    "separation": 8,
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "minecraft:villages"
+    },
+    "salt": 1321566734
+  },
+  "structures": [
+    {
+      "structure": "merchantsdelight:pillager_camp",
+      "weight": 1
+    }
+  ]
+}
