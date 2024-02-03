@@ -13,8 +13,8 @@ import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.state.StateManager
-import net.minecraft.state.property.Properties
 import net.minecraft.util.ActionResult
+import net.minecraft.util.BlockMirror
 import net.minecraft.util.BlockRotation
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -24,11 +24,12 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import net.minecraft.state.property.Properties.HORIZONTAL_FACING as HORIZONTAL_FACING
 
 class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), BlockEntityProvider {
     lateinit var item: MerchantWalletItem
     init {
-        defaultState = defaultState.with(Properties.HORIZONTAL_FACING, Direction.NORTH)
+        defaultState = defaultState.with(HORIZONTAL_FACING, Direction.NORTH)
     }
 
 
@@ -36,11 +37,11 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
         get() = item.capacity
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>?) {
-        builder?.add(Properties.HORIZONTAL_FACING)
+        builder?.add(HORIZONTAL_FACING)
     }
 
     override fun getPlacementState(ctx: ItemPlacementContext?): BlockState? {
-        return super.getPlacementState(ctx)?.with(Properties.HORIZONTAL_FACING, ctx?.horizontalPlayerFacing?.opposite)
+        return super.getPlacementState(ctx)?.with(HORIZONTAL_FACING, ctx?.horizontalPlayerFacing?.opposite)
     }
 
     override fun onUse(
@@ -66,7 +67,6 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
             val amount = (capacity - blockEntity.amount).coerceAtMost(activeStack.count)
             if (amount > 0) {
                 blockEntity.amount += amount
-                MerchantsDelight.logger.info("Adding {} emeralds to block entity", amount)
                 activeStack.count -= amount
                 return ActionResult.SUCCESS
             }
@@ -129,6 +129,10 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
     }
 
     override fun rotate(state: BlockState, rotation: BlockRotation): BlockState {
-        return state.with(Properties.HORIZONTAL_FACING, rotation.rotate(state.get(Properties.HORIZONTAL_FACING)))
+        return state.with(HORIZONTAL_FACING, rotation.rotate(state.get(HORIZONTAL_FACING)))
+    }
+
+    override fun mirror(state: BlockState, mirror: BlockMirror): BlockState {
+        return state.rotate(mirror.getRotation(state.get(HORIZONTAL_FACING)))
     }
 }
