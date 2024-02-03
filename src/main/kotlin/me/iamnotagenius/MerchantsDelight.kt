@@ -1,6 +1,5 @@
 package me.iamnotagenius
 
-import fzzyhmstrs.structurized_reborn.api.StructurePoolAddCallback
 import fzzyhmstrs.structurized_reborn.impl.FabricStructurePoolRegistry
 import me.iamnotagenius.blocks.MerchantWalletBlock
 import me.iamnotagenius.blocks.entities.MerchantWalletBlockEntity
@@ -64,10 +63,12 @@ object MerchantsDelight : ModInitializer {
             builder.build()
         )
 
-        FabricStructurePoolRegistry.registerSimple(
-            Identifier("minecraft:village/plains/houses"),
-            Identifier("merchantsdelight:village_bank"),
-            10
-        )
+        listOf("plains", "desert", "taiga", "savanna", "snowy").forEach {
+            FabricStructurePoolRegistry.registerSimple(
+                Identifier("minecraft:village/${it}/houses"),
+                Identifier("merchantsdelight:village_bank_${it}"),
+                10
+            )
+        }
 	}
 }
