@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "merchantsdelight:block/emerald_wallet" },
-    "facing=east":  { "model": "merchantsdelight:block/emerald_wallet", "y":  90 },
-    "facing=south": { "model": "merchantsdelight:block/emerald_wallet", "y": 180 },
-    "facing=west":  { "model": "merchantsdelight:block/emerald_wallet", "y": 270 }
-  }
-}

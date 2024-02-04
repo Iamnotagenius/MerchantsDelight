@@ -6,16 +6,19 @@ import me.iamnotagenius.capacity
 import me.iamnotagenius.emeralds
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
-import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.StackReference
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.nbt.NbtInt
 import net.minecraft.screen.slot.Slot
+import net.minecraft.text.LiteralTextContent
+import net.minecraft.text.MutableText
+import net.minecraft.text.Text
 import net.minecraft.util.ClickType
+import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
 
@@ -63,7 +66,7 @@ class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) 
         return super.getPlacementState(context)
     }
 
-    override fun isItemBarVisible(stack: ItemStack?): Boolean = true
+    override fun isItemBarVisible(stack: ItemStack?): Boolean = stack?.nbt?.contains(EMERALDS_KEY)?: false
 
     fun addToWallet(walletStack: ItemStack?, emeraldStack: ItemStack, justOne: Boolean): Boolean {
         if (walletStack?.item !is MerchantWalletItem || !emeraldStack.isOf(Items.EMERALD)) {
@@ -94,6 +97,18 @@ class MerchantWalletItem(block: Block?, settings: Settings?, val capacity: Int) 
             walletStack,
             if (justOne && walletStack.emeralds > 0) 1 else walletStack.emeralds.coerceAtMost(Items.EMERALD.maxCount)
         )
+    }
+
+    override fun appendTooltip(
+        stack: ItemStack?,
+        world: World?,
+        tooltip: MutableList<Text>?,
+        context: TooltipContext?
+    ) {
+        if (context?.isAdvanced == true) {
+            tooltip?.add(MutableText.of(LiteralTextContent(stack.emeralds.toString() + "/" + stack.capacity))
+                .formatted(Formatting.GRAY))
+        }
     }
 
     companion object {

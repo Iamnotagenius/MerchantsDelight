@@ -5,6 +5,7 @@ import fzzyhmstrs.structurized_reborn.impl.FabricStructurePoolRegistry
 import me.iamnotagenius.blocks.MerchantWalletBlock
 import me.iamnotagenius.blocks.entities.MerchantWalletBlockEntity
 import me.iamnotagenius.items.MerchantWalletItem
+import me.iamnotagenius.processors.PutEmeraldsProcessor
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
@@ -15,6 +16,8 @@ import net.minecraft.enchantment.EnchantmentTarget
 import net.minecraft.item.ItemGroups
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
+import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.Identifier
 import org.slf4j.Logger
@@ -22,7 +25,7 @@ import org.slf4j.LoggerFactory
 
 object MerchantsDelight : ModInitializer {
     val logger: Logger = LoggerFactory.getLogger("merchantsdelight")
-    private const val MOD_ID = "merchantsdelight"
+    const val MOD_ID = "merchantsdelight"
 
     lateinit var MERCHANT_BLOCK_ENTITY: BlockEntityType<MerchantWalletBlockEntity>
 
@@ -70,11 +73,18 @@ object MerchantsDelight : ModInitializer {
 
         Registry.register(Registries.ENCHANTMENT, Identifier.of(MOD_ID, "deep_pocket"), DEEP_POCKET)
 
+        Registry.register(
+            Registries.STRUCTURE_PROCESSOR,
+            Identifier.of(MOD_ID, "put_emeralds"),
+            PutEmeraldsProcessor.TYPE
+        )
+
         listOf("plains", "desert", "taiga", "savanna", "snowy").forEach {
-            FabricStructurePoolRegistry.registerSimple(
+            FabricStructurePoolRegistry.register(
                 Identifier("minecraft:village/${it}/houses"),
                 Identifier("merchantsdelight:village_bank_${it}"),
-                10
+                10,
+                RegistryKey.of(RegistryKeys.PROCESSOR_LIST, Identifier.of(MOD_ID, "bank_processors"))
             )
         }
 	}

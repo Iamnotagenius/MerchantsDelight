@@ -21,6 +21,6 @@ class MerchantWalletBlockEntity(pos: BlockPos?, state: BlockState?, var amount: 
     }
 
     companion object {
-        private val POCKET_DEPTH_KEY = "PocketDepth"
+        private const val POCKET_DEPTH_KEY = "PocketDepth"
     }
 }

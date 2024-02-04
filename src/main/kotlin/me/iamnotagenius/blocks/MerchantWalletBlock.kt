@@ -57,11 +57,8 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
     ): ActionResult {
         val blockEntity = world.getBlockEntity(pos) as? MerchantWalletBlockEntity ?: return ActionResult.FAIL
         val activeStack = player.inventory.mainHandStack
-        MerchantsDelight.logger.info("Active stack: {}", activeStack)
-        MerchantsDelight.logger.info("onUse: emeralds: {}", blockEntity.amount)
         if (activeStack.isEmpty) {
             val amount = blockEntity.amount.coerceAtMost(Items.EMERALD.maxCount)
-            MerchantsDelight.logger.info("Removing {} emeralds from block entity", amount)
             blockEntity.amount -= amount
             player.inventory.setStack(player.inventory.selectedSlot, ItemStack(Items.EMERALD, amount))
             return ActionResult.SUCCESS
@@ -120,7 +117,9 @@ class MerchantWalletBlock(settings: Settings) : BlockWithEntity(settings), Block
         }
         val itemStack = ItemStack(item)
         itemStack.emeralds = blockEntity.amount
-        EnchantmentHelper.set(mapOf(MerchantsDelight.DEEP_POCKET to blockEntity.pocket_depth), itemStack)
+        if (blockEntity.pocket_depth > 0) {
+            EnchantmentHelper.set(mapOf(MerchantsDelight.DEEP_POCKET to blockEntity.pocket_depth), itemStack)
+        }
         val itemEntity = ItemEntity(
             world,
             pos.x.toDouble() + 0.5,
